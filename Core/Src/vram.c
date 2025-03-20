@@ -149,38 +149,12 @@ void clear_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width,
 */
 void write_vram_block(VRAM_typedef const *vram_block, const uint8_t write_width, const uint8_t write_height, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8])
 {
-
-    uint8_t vram_write_data[VRAM_HIGH] = {0};
-    uint8_t vram_write_data_mask[VRAM_HIGH / 8] = {0};
-
-    // 改处理的第几个像素点
-    uint16_t vram_data_index = 0;
-
     if (vram_block != NULL)
     {
         // 以X轴的像素点为起点
-        for (uint8_t k = vram_block->x; k < vram_block->x + write_width; k++)
+        for (uint8_t k = 0; k < write_width; k++)
         {
-            memset(vram_write_data, 0, VRAM_HIGH);
-            memset(vram_write_data_mask, 0, VRAM_HIGH / 8);
-
-            // 从y轴开始写入数据
-            for (uint8_t i = vram_block->y; i < vram_block->y + write_height; i++)
-            {
-                vram_write_data[i] = (vram_block->data[vram_data_index / 8] >> (vram_data_index % 8)) & 0x1U;
-                vram_data_index++;
-            }
-
-            // 将字节缩小成掩码 可优化
-            for (uint8_t i = 0; i < VRAM_HIGH / 8; i++)
-            {
-                for (uint8_t j = 0; j < VRAM_HIGH / 8; j++)
-                {
-                    vram_write_data_mask[i] |= vram_write_data[i * 8 + j] << j;
-                }
-                // 将掩码写入到显存
-                vram_data[k][i] |= vram_write_data_mask[i];
-            }
+            memcpy_bit(&vram_data[k + vram_block->x][vram_block->y / 8], &vram_block->data[k * vram_block->height / 8], (vram_block->y % 8), 0, write_height);
         }
     }
 }
@@ -274,5 +248,35 @@ void write_to_vram_test(void)
 
         write_to_vram(&test01);
         osDelay(1000);
+    }
+}
+
+void memcpy_bit(unsigned char *dest, unsigned char *src, unsigned char dest_bit_offset, unsigned char src_bit_offset, unsigned int bit_count)
+{
+
+    // 复制的第几个字节
+    unsigned int src_byte;
+    // 复制的第几个bit
+    unsigned int src_bit;
+    // 目标的第几个字节
+    unsigned int dest_byte;
+    // 目标的第几个bit
+    unsigned int dest_bit;
+    // 需要复制的bit数据
+    unsigned char bit;
+
+    for (unsigned int i = 0; i < bit_count; i++)
+    {
+        src_byte = (src_bit_offset + i) / 8;
+        src_bit = (src_bit_offset + i) % 8;
+
+        dest_byte = (dest_bit_offset + i) / 8;
+        dest_bit = (dest_bit_offset + i) % 8;
+
+        bit = (src[src_byte] >> src_bit) & 0x01;
+        // 将需要复制的bit 清 0
+        dest[dest_byte] = dest[dest_byte] & ~(0x01 << dest_bit);
+        // 复制需要复制的bit
+        dest[dest_byte] |= (bit << dest_bit);
     }
 }
