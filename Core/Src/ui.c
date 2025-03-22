@@ -29,15 +29,33 @@ void page_node_init(PageNodeTypedef *NodePage)
 
     uint8_t ItemNodeLocation_y = ITEM_GAP_HEIGHT;
     uint8_t ItemNodeLocation_x = ITEM_GAP_WIDTH;
+    uint8_t item_width = 0;
+
     // 为页面下的所有元素初始化
     while (ItemNode != NULL)
     {
         if (ItemNode->ItemType == 0)
         {
-            item_node_text_init(ItemNode, ItemNodeLocation_x, ItemNodeLocation_y);
+            item_width = item_node_text_init(ItemNode, ItemNodeLocation_x, ItemNodeLocation_y);
             // 获取当前元素的高度，并将设置到下个元素的y坐标上
             ItemNodeLocation_y += get_write_block_height(ItemNode->vram) + ITEM_GAP_HEIGHT;
+
+            // 更新页面宽度
+            if (NodePage->page_widght < ItemNodeLocation_x + item_width)
+            {
+                // 将页面宽度设置为当前元素宽度
+                NodePage->page_widght = ItemNodeLocation_x + item_width;
+            }
+            else
+            {
+                // do nothing
+            }
+            // 更新页面高度设置
+            NodePage->page_height += ItemNodeLocation_y;
+            // 更新页面item数量
+            NodePage->ItemSize++;
         }
+
         ItemNode = ItemNode->itemNodeNext;
     }
 
