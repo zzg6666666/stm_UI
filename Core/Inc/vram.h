@@ -31,4 +31,6 @@ void clear_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width,
 void write_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width, const uint8_t clear_height, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8]);
 void memcpy_bit(unsigned char *dest, unsigned char *src, unsigned char dest_bit_offset, unsigned char src_bit_offset, unsigned int bit_count);
 void memset_bit(unsigned char *dest, unsigned char dest_bit_offset, unsigned char value, unsigned int bit_count);
+void get_intersection(uint8_t object1_start, uint8_t object1_length, uint8_t object2_start, uint8_t object2_length, uint8_t *intersection_start, uint8_t *intersection_length);
+void write_vram_block_with_camera(VRAM_typedef const *vram_block, const uint8_t camera_x, const uint8_t camera_y, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8]);
 #endif

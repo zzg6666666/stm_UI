@@ -17,7 +17,6 @@ y 64
 */
 
 uint8_t main_vram_data[VRAM_WIDTH][VRAM_HIGH / 8];
-
 void write_to_vram(VRAM_typedef const *vram_block)
 {
     uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8] = {0};
@@ -120,17 +119,71 @@ void clear_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width,
         memset_bit(&vram_data[vram_block->x + i][vram_block->y / 8], (vram_block->y % 8), 0U, clear_height);
     }
 }
-/*
-可优化
-*/
+
 void write_vram_block(VRAM_typedef const *vram_block, const uint8_t write_width, const uint8_t write_height, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8])
 {
     if (vram_block != NULL)
     {
         // 以X轴的像素点为起点
-        for (uint8_t k = 0; k < write_width; k++)
+        for (uint8_t i = 0; i < write_width; i++)
         {
-            memcpy_bit(&vram_data[k + vram_block->x][vram_block->y / 8], &vram_block->data[k * vram_block->height / 8], (vram_block->y % 8), 0, write_height);
+            memcpy_bit(&vram_data[i + vram_block->x][vram_block->y / 8], &vram_block->data[i * vram_block->height / 8], (vram_block->y % 8), 0, write_height);
+        }
+    }
+}
+
+void write_vram_block_with_camera(VRAM_typedef const *vram_block, const uint8_t camera_x, const uint8_t camera_y, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8])
+{
+    if (vram_block != NULL)
+    {
+        // 写入的目标坐标x
+        uint8_t write_position_x = 0;
+        // 写入的目标坐标y
+        uint8_t write_position_y = 0;
+
+        // 写入宽度
+        uint8_t write_length_x = 0;
+        // 写入长度
+        uint8_t write_length_y = 0;
+
+        // vram_block 中 被复制像素点的起始位置
+        uint16_t vram_block_index = 0;
+
+        // 获得 vram block 和 摄像机的交集
+        get_intersection(vram_block->x, vram_block->width, camera_x, VRAM_WIDTH, &write_position_x, &write_length_x);
+        get_intersection(vram_block->y, vram_block->height, camera_y, VRAM_HIGH, &write_position_y, &write_length_y);
+
+        if ((write_length_x > 0) && (write_length_y > 0))
+        {
+            for (uint8_t i = 0; i < write_length_x; i++)
+            {
+                vram_block_index = (i + write_position_x - vram_block->x) * vram_block->height // x轴的相对位置
+                                   + write_position_y - vram_block->y;                         // y轴的相对位置
+                // i + write_position_x - camera_x 映射到carmera的坐标  write_position_y - camera_y 映射到carmera的坐标
+                memcpy_bit(&vram_data[i + write_position_x - camera_x][(write_position_y - camera_y) / 8], &vram_block->data[vram_block_index / 8], (write_position_y - camera_y) % 8, vram_block_index % 8, write_length_y);
+            }
+        }
+    }
+}
+void get_intersection(uint8_t object1_start, uint8_t object1_length, uint8_t object2_start, uint8_t object2_length, uint8_t *intersection_start, uint8_t *intersection_length)
+{
+
+    if ((intersection_start != NULL) && (intersection_length != NULL))
+    {
+        uint8_t start = object1_start > object2_start ? object1_start : object2_start;
+        uint8_t end = object1_start + object1_length < object2_start + object2_length
+                          ? object1_start + object1_length
+                          : object2_start + object2_length;
+        *intersection_start = start;
+        //无交集
+        if(start > end)
+        {
+            *intersection_length = 0;
+        }
+        else
+        {
+            *intersection_length = end - start;
+
         }
     }
 }
@@ -260,7 +313,7 @@ void memset_bit(unsigned char *dest, unsigned char dest_bit_offset, unsigned cha
     {
         dest_byte = (dest_bit_offset + i) / 8;
         dest_bit = (dest_bit_offset + i) % 8;
-        //bit set 为1
+        // bit set 为1
         if (value & 0x1U)
         {
             dest[dest_byte] |= (0x1U << dest_bit);
