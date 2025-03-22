@@ -38,6 +38,22 @@ void write_to_vram(VRAM_typedef const *vram_block)
     }
     memcpy(main_vram_data, vram_data, VRAM_WIDTH * VRAM_HIGH / 8);
 }
+void write_to_vram_with_camera(VRAM_typedef const *vram_block, uint16_t camera_x, uint16_t camera_y)
+{
+    uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8] = {0};
+    const VRAM_typedef *vram_blockHead = vram_block;
+
+    // 遍历链表
+    while (vram_blockHead != NULL)
+    {
+        // 清除vram block
+        // clear_vram_block(vram_blockHead, write_width, write_height, vram_data);
+        // 写入vram block
+        write_vram_block_with_camera(vram_blockHead, camera_x, camera_y, vram_data);
+        vram_blockHead = vram_blockHead->nextVram;
+    }
+    memcpy(main_vram_data, vram_data, VRAM_WIDTH * VRAM_HIGH / 8);
+}
 
 // 往显存中写数据但是不擦除整个显存块，只擦出覆盖部分
 void write_to_vram_with_cover(VRAM_typedef const *vram_block)
@@ -175,15 +191,14 @@ void get_intersection(uint8_t object1_start, uint8_t object1_length, uint8_t obj
                           ? object1_start + object1_length
                           : object2_start + object2_length;
         *intersection_start = start;
-        //无交集
-        if(start > end)
+        // 无交集
+        if (start > end)
         {
             *intersection_length = 0;
         }
         else
         {
             *intersection_length = end - start;
-
         }
     }
 }
