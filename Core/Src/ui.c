@@ -55,10 +55,9 @@ void page_node_init(PageNodeTypedef *NodePage)
 }
 
 // 给text 节点分配内存 与 初始化
-void item_node_text_init(ItemNodeTypedef *NodeItem, uint8_t text_loction_x, uint8_t text_loction_y)
+uint8_t item_node_text_init(ItemNodeTypedef *NodeItem, uint8_t text_loction_x, uint8_t text_loction_y)
 {
-    // uint8_t text_len = strlen(NodeItem->name);
-    uint8_t text_vram_len = 14;
+    uint8_t text_vram_len = 0;
 
     // 分配 vram 内存
     NodeItem->vram = (VRAM_typedef *)pvPortMalloc(sizeof(VRAM_typedef));
@@ -97,6 +96,8 @@ void item_node_text_init(ItemNodeTypedef *NodeItem, uint8_t text_loction_x, uint
         NodeItem->curve->setLocation_X = 0;
         NodeItem->curve->passedTimes = 0;
     }
+
+    return NodeItem->vram->width;
 }
 
 // 页面元素释放内存
