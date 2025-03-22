@@ -1,32 +1,45 @@
 {
-    "configurations": [
-        {
-            "showDevDebugOutput": "parsed",
-            "cwd": "${workspaceRoot}",
-            "executable": "./build/debug/stm_UI.elf",
-            "name": "Debug STM32",
-            "request": "launch",
-            "type": "cortex-debug",
-            "servertype": "openocd",
-            "preLaunchTask": "Build STM",
-            "device": "stm32f103xb.s",
-            "configFiles": [
-                "openocd.cfg"
-            ]
-        },
-        {
-            "showDevDebugOutput": "parsed",
-            "cwd": "${workspaceRoot}",
-            "executable": "./build/debug/stm_UI.elf",
-            "name": "Attach STM32",
-            "request": "attach",
-            "type": "cortex-debug",
-            "servertype": "openocd",
-            "preLaunchTask": "Build STM",
-            "device": "stm32f103xb.s",
-            "configFiles": [
-                "openocd.cfg"
-            ]
-        }
-    ]
+  "configurations": [
+    {
+      "showDevDebugOutput": "parsed",
+      "cwd": "${workspaceRoot}",
+      "executable": "./build/debug/stm_UI.elf",
+      "name": "Debug STM32",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "preLaunchTask": "Build STM",
+      "device": "stm32f103xb.s",
+      "svdFile": "STM32F103xx.svd",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      },
+      "configFiles": [
+        "openocd.cfg"
+      ]
+    },
+    {
+      "showDevDebugOutput": "parsed",
+      "cwd": "${workspaceRoot}",
+      "executable": "./build/debug/stm_UI.elf",
+      "name": "Attach STM32",
+      "request": "attach",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "preLaunchTask": "Build STM",
+      "device": "stm32f103xb.s",
+      "configFiles": [
+        "openocd.cfg"
+      ]
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/zzg/Desktop/freertos/stm_UI/Core/Src",
+      "program": "/Users/zzg/Desktop/freertos/stm_UI/Core/Src/build/Debug/outDebug"
+    }
+  ]
 }
