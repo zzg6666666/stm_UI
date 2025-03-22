@@ -115,33 +115,9 @@ uint8_t get_write_block_height(VRAM_typedef const *vram_block)
 void clear_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width, const uint8_t clear_height, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8])
 {
 
-    uint8_t vram_clear_data[VRAM_HIGH] = {0};
-    uint8_t vram_clear_data_mask[VRAM_HIGH / 8] = {0};
-
-    if (vram_block != NULL)
+    for (uint8_t i = 0; i < clear_width; i++)
     {
-        // 将bit缩放到字节
-        for (uint8_t i = vram_block->y; i < (vram_block->y + clear_height); i++)
-        {
-            vram_clear_data[i] = 0x01u;
-        }
-        // 将字节缩小成掩码
-        for (uint8_t i = 0; i < VRAM_HIGH / 8; i++)
-        {
-            for (uint8_t j = 0; j < VRAM_HIGH / 8; j++)
-            {
-                vram_clear_data_mask[i] |= vram_clear_data[i * 8 + j] << j;
-            }
-        }
-
-        // 清除vram通过掩码
-        for (uint8_t i = 0; i < clear_width; i++)
-        {
-            for (uint8_t j = 0; j < VRAM_HIGH / 8; j++)
-            {
-                vram_data[vram_block->x + i][j] &= ~vram_clear_data_mask[j];
-            }
-        }
+        memset_bit(&vram_data[vram_block->x + i][vram_block->y / 8], (vram_block->y % 8), 0U, clear_height);
     }
 }
 /*
@@ -182,21 +158,13 @@ void get_vram_data(VRAM_typedef *vram_block)
 
     uint8_t get_width = get_write_block_width(vram_block);
     uint8_t get_height = get_write_block_height(vram_block);
-    // 复制的第几个像素点
-    uint16_t vram_data_index = 0;
     memset(vram_block->data, 0, vram_block->width * vram_block->height / 8);
     if (vram_block != NULL)
     {
-        vram_data_index = 0;
         // 需要获取的显存的x轴范围
-        for (uint8_t i = vram_block->x; i < get_width + vram_block->x; i++)
+        for (uint8_t i = 0; i < get_width; i++)
         {
-            // 需要获取的显存的x轴范围
-            for (uint8_t j = vram_block->y; j < vram_block->y + get_height; j++)
-            {
-                vram_block->data[vram_data_index / 8] |= (main_vram_data[i][j / 8] >> (j % 8)) << (vram_data_index % 8);
-                vram_data_index++;
-            }
+            memcpy_bit(&vram_block->data[i * vram_block->height / 8], &main_vram_data[i + vram_block->x][vram_block->y / 8], ((i * vram_block->height) % 8), vram_block->y % 8, get_height);
         }
     }
 }
@@ -275,8 +243,31 @@ void memcpy_bit(unsigned char *dest, unsigned char *src, unsigned char dest_bit_
 
         bit = (src[src_byte] >> src_bit) & 0x01;
         // 将需要复制的bit 清 0
-        dest[dest_byte] = dest[dest_byte] & ~(0x01 << dest_bit);
+        dest[dest_byte] &= ~(bit << dest_bit);
         // 复制需要复制的bit
         dest[dest_byte] |= (bit << dest_bit);
+    }
+}
+
+void memset_bit(unsigned char *dest, unsigned char dest_bit_offset, unsigned char value, unsigned int bit_count)
+{
+    // 目标的第几个字节
+    unsigned int dest_byte;
+    // 目标的第几个bit
+    unsigned int dest_bit;
+
+    for (unsigned int i = 0; i < bit_count; i++)
+    {
+        dest_byte = (dest_bit_offset + i) / 8;
+        dest_bit = (dest_bit_offset + i) % 8;
+        //bit set 为1
+        if (value & 0x1U)
+        {
+            dest[dest_byte] |= (0x1U << dest_bit);
+        }
+        else
+        {
+            dest[dest_byte] &= ~(0x1U << dest_bit);
+        }
     }
 }

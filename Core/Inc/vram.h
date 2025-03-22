@@ -30,4 +30,5 @@ uint8_t get_write_block_height(VRAM_typedef const *vram_block);
 void clear_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width, const uint8_t clear_height, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8]);
 void write_vram_block(VRAM_typedef const *vram_block, const uint8_t clear_width, const uint8_t clear_height, uint8_t vram_data[VRAM_WIDTH][VRAM_HIGH / 8]);
 void memcpy_bit(unsigned char *dest, unsigned char *src, unsigned char dest_bit_offset, unsigned char src_bit_offset, unsigned int bit_count);
+void memset_bit(unsigned char *dest, unsigned char dest_bit_offset, unsigned char value, unsigned int bit_count);
 #endif
