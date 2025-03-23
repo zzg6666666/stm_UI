@@ -41,10 +41,10 @@ void page_node_init(PageNodeTypedef *NodePage)
             ItemNodeLocation_y += get_write_block_height(ItemNode->vram) + ITEM_GAP_HEIGHT;
 
             // 更新页面宽度
-            if (NodePage->page_widght < ItemNodeLocation_x + item_width)
+            if (NodePage->page_width < ItemNodeLocation_x + item_width)
             {
                 // 将页面宽度设置为当前元素宽度
-                NodePage->page_widght = ItemNodeLocation_x + item_width;
+                NodePage->page_width = ItemNodeLocation_x + item_width;
             }
             else
             {

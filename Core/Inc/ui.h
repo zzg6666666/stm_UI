@@ -36,7 +36,7 @@ typedef struct PageNodeTypedef
     struct ItemNodeTypedef *itemNodeHead;
     ItemNodeTypedef *selectedItem; // 当前选中项
     uint8_t ItemSize;              // 当前页面的item项数
-    uint16_t page_widght;           // 当前页面的宽度
+    uint16_t page_width;           // 当前页面的宽度
     uint16_t page_height;          // 当前页面的长度
 
 } PageNodeTypedef;
