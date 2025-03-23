@@ -63,14 +63,10 @@ void write_to_vram_with_cover(VRAM_typedef const *vram_block)
     // 遍历链表
     while (vram_blockHead != NULL)
     {
-        // 计算写入数据的宽度长度
-        uint8_t write_width = get_write_block_width(vram_blockHead);
-        uint8_t write_height = get_write_block_height(vram_blockHead);
-
         // 清除vram block
-        clear_vram_block(vram_blockHead, write_width, write_height, main_vram_data);
+        clear_vram_block_with_camera(vram_blockHead, camera_get_x(), camera_get_y(), main_vram_data);
         // 写入vram block
-        write_vram_block(vram_blockHead, write_width, write_height, main_vram_data);
+        write_vram_block_with_camera(vram_blockHead, camera_get_x(), camera_get_y(), main_vram_data);
         vram_blockHead = vram_blockHead->nextVram;
     }
 }
