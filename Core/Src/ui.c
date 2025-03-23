@@ -73,7 +73,7 @@ void page_node_init(PageNodeTypedef *NodePage)
 }
 
 // 给text 节点分配内存 与 初始化
-uint8_t item_node_text_init(ItemNodeTypedef *NodeItem, uint8_t text_loction_x, uint8_t text_loction_y)
+uint8_t item_node_text_init(ItemNodeTypedef *NodeItem, uint16_t text_loction_x, uint16_t text_loction_y)
 {
     uint8_t text_vram_len = 0;
 
