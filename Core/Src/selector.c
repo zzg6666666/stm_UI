@@ -108,7 +108,7 @@ void set_selector_location(VRAM_typedef *vram)
     selector.selectorPositionBanimotion->startLocation_y = selector.selectorVram->y;
 
     // 设置选择器时间参数
-    selector.selectorPositionBanimotion->wantedTimes = CURVE_MOVING_TIME;
+    selector.selectorPositionBanimotion->wantedTimes = CURVE_MOVING_TIME * 2;
     selector.selectorPositionBanimotion->passedTimes = 0;
 
     // 设置选择器显存块大小
@@ -120,7 +120,7 @@ void set_selector_location(VRAM_typedef *vram)
     selector.selectorAreaAanimotion->startLocation_y = selector.selectorVram->height;
 
     // 设置选择器时间参数
-    selector.selectorAreaAanimotion->wantedTimes = CURVE_MOVING_TIME;
+    selector.selectorAreaAanimotion->wantedTimes = CURVE_MOVING_TIME * 2;
     selector.selectorAreaAanimotion->passedTimes = 0;
 }
 
