@@ -50,4 +50,8 @@ void selector_init_animation(PageNodeTypedef *currentNodePage);
 uint8_t update_selector_state(PageNodeTypedef *currentNodePage);
 void selector_animation(PageNodeTypedef *currentNodePage);
 void set_selector_location(VRAM_typedef *vram);
+uint16_t get_selector_y();
+uint16_t get_selector_x();
+uint8_t get_selector_height();
+uint8_t get_selector_width();
 #endif

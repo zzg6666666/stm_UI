@@ -185,3 +185,25 @@ void selector_init(PageNodeTypedef *currentNodePage)
     // 暂时无用
     selector.selectedItem = currentNodePage->itemNodeHead;
 }
+
+uint16_t get_selector_x()
+{
+    return selector.selectorPositionBanimotion->endLocation_X;
+}
+
+uint16_t get_selector_y()
+{
+    return selector.selectorPositionBanimotion->endLocation_y;
+}
+
+uint8_t get_selector_height()
+{
+    return selector.selectorAreaAanimotion->endLocation_y;
+}
+
+uint8_t get_selector_width()
+{
+    return selector.selectorAreaAanimotion->endLocation_X;
+}
+
+
