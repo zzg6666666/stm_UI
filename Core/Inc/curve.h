@@ -13,17 +13,17 @@ typedef struct
     // 已经度过的时间
     uint8_t passedTimes;
     // 开始的x轴地址
-    uint8_t startLocation_X;
+    uint16_t startLocation_X;
     // 开始的y轴地址
-    uint8_t startLocation_y;
+    uint16_t startLocation_y;
     // 结束的x轴
-    uint8_t endLocation_X;
+    uint16_t endLocation_X;
     // 结束的y轴
-    uint8_t endLocation_y;
+    uint16_t endLocation_y;
     // 当前设置的位置x
-    uint8_t setLocation_X;
+    uint16_t setLocation_X;
     // 当前设置的位置y
-    uint8_t setLocation_y;
+    uint16_t setLocation_y;
 } curve_state_typedef;
 
 typedef enum
@@ -36,8 +36,8 @@ typedef enum
 // static float cubicEaseOut(float t);
 void linear_animation(curve_state_typedef *curveState);
 void animation_entry(curve_state_typedef *curveState, curve_typedef curveType);
-void update_location_linear(uint8_t *setLocation, uint8_t startLocation, uint8_t endLocation, uint8_t passedTimes, uint8_t wantedTimes);
-void update_location_non_linear(uint8_t *setLocation, uint8_t startLocation, uint8_t endLocation, uint8_t passedTimes, uint8_t wantedTimes);
+void update_location_linear(uint16_t *setLocation, uint16_t startLocation, uint16_t endLocation, uint8_t passedTimes, uint8_t wantedTimes);
+void update_location_non_linear(uint16_t *setLocation, uint16_t startLocation, uint16_t endLocation, uint8_t passedTimes, uint8_t wantedTimes);
 void nonLinear_animation(curve_state_typedef *curveState);
 void linear_animation(curve_state_typedef *curveState);
 

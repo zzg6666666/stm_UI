@@ -9,7 +9,7 @@ static float cubicEaseOut(float t)
     return (1.0f - powf(1.0f - t, 3.0f));
 }
 
-void update_location_linear(uint8_t *setLocation, uint8_t startLocation, uint8_t endLocation, uint8_t passedTimes, uint8_t wantedTimes)
+void update_location_linear(uint16_t *setLocation, uint16_t startLocation, uint16_t endLocation, uint8_t passedTimes, uint8_t wantedTimes)
 {
 
     float delta = 0;
@@ -24,17 +24,17 @@ void update_location_linear(uint8_t *setLocation, uint8_t startLocation, uint8_t
     if (startLocation > endLocation)
     {
         delta = (float)(startLocation - endLocation) / wantedTimes;
-        *setLocation = (uint8_t)roundf(startLocation - delta * passedTimes);
+        *setLocation = (uint16_t)roundf(startLocation - delta * passedTimes);
     }
     // 当前位置小于结束位置
     else
     {
         delta = (float)(endLocation - startLocation) / wantedTimes;
-        *setLocation = (uint8_t)roundf(startLocation + delta * passedTimes);
+        *setLocation = (uint16_t)roundf(startLocation + delta * passedTimes);
     }
 }
 
-void update_location_non_linear(uint8_t *setLocation, uint8_t startLocation, uint8_t endLocation, uint8_t passedTimes, uint8_t wantedTimes)
+void update_location_non_linear(uint16_t *setLocation, uint16_t startLocation, uint16_t endLocation, uint8_t passedTimes, uint8_t wantedTimes)
 {
     // 超时
     if (passedTimes > wantedTimes)
@@ -48,12 +48,12 @@ void update_location_non_linear(uint8_t *setLocation, uint8_t startLocation, uin
     if (startLocation > endLocation)
     {
         float delta = (float)(startLocation - endLocation);
-        *setLocation = (uint8_t)roundf(startLocation - delta * easeOutValue);
+        *setLocation = (uint16_t)roundf(startLocation - delta * easeOutValue);
     }
     else
     {
         float delta = (float)(endLocation - startLocation);
-        *setLocation = (uint8_t)roundf(startLocation + delta * easeOutValue);
+        *setLocation = (uint16_t)roundf(startLocation + delta * easeOutValue);
     }
 }
 
