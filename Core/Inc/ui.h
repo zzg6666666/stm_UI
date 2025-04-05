@@ -56,5 +56,7 @@ uint8_t item_node_text_init(ItemNodeTypedef *NodeItem, uint16_t text_loction_x, 
 void page_node_init(PageNodeTypedef *NodePage);
 void curve_animotion(void);
 void show_UI(void);
+void write_setting_item_vram(const ItemNodeTypedef *itemNodeHead);
+void turn_num_to_char(uint8_t num, char *char_num);
 
 #endif

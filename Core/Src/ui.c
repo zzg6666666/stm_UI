@@ -181,3 +181,16 @@ void curve_animotion(void)
         ItemNode = ItemNode->itemNodeNext;
     }
 }
+
+void write_setting_item_vram(const ItemNodeTypedef *itemNodeHead)
+{
+
+    while (itemNodeHead != NULL)
+    {
+        if (itemNodeHead->settingVram != NULL)
+        {
+            write_to_vram_with_cover(itemNodeHead->settingVram);
+        }
+        itemNodeHead = itemNodeHead->itemNodeNext;
+    }
+}
