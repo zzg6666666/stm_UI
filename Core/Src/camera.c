@@ -53,8 +53,8 @@ void camera_update_y(uint16_t *endLocation_y, uint16_t focus_y, uint8_t focus_he
 void camera_update(uint16_t focus_x, uint8_t focus_width, uint16_t focus_y, uint8_t focus_height)
 {
 
-    uint16_t endLocation_y = 0;
-    uint16_t endLocation_X = 0;
+    uint16_t endLocation_y = main_camera.camera_curve.endLocation_y;
+    uint16_t endLocation_X = main_camera.camera_curve.endLocation_X;
 
     camera_update_y(&endLocation_y, focus_y, focus_height);
     camera_update_x(&endLocation_X, focus_x, focus_width);
