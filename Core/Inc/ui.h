@@ -12,7 +12,16 @@
 // item 之间的间隙
 #define ITEM_GAP_WIDTH 4
 
-#define ITEM_TYPE_TEXT 0
+typedef enum ItemType
+{
+    ITEM_TYPE_TEXT = 1,
+} ItemType;
+
+typedef enum SettingType
+{
+    SETTING_TYPE_SWITCH = 1,
+    SETTING_TYPE_NUMS = 2
+} SettingType;
 
 // 子项节点结构体
 typedef struct ItemNodeTypedef
