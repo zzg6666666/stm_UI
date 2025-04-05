@@ -19,12 +19,14 @@ typedef struct ItemNodeTypedef
 {
     char name[20];
     struct ItemNodeTypedef *itemNodeNext;
-    uint8_t ItemType;           // 子节点类型
+    ItemType ItemType;          // 子节点类型
+    SettingType SettingType;    // 设置项类型
     VRAM_typedef *vram;         // item的vram
     curve_state_typedef *curve; // 子节点的曲线结构体
     void (*init)(void);         // 初始化函数
-    void (*Hook)(void);         // hook 函数
-    void (*CallBack)(void);     // call back 函数
+    uint8_t (*Hook)(void);      // hook 函数 用于更新setting vram的状态
+    void (*CallBack)(uint8_t);  // call back 函数 点击按键后执行的函数
+    VRAM_typedef *settingVram;  // hook 函数返回状态的状态的vram
 } ItemNodeTypedef;
 
 // 页面节点结构体
